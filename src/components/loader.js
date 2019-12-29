@@ -2,10 +2,11 @@ import React from 'react';
 
 function Loader (){
     return(
-        <div class="ui segment">
-            <div class="ui active dimmer">
-                <div class="ui text loader">Loading</div>
+        <div className="ui segment">
+            <div className="ui active dimmer">
+                <div className="ui text loader"></div>
             </div>
+            <p>Loading...</p>
             <p></p>
         </div>
     )

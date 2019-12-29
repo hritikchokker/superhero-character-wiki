@@ -1,30 +1,44 @@
 import React from 'react';
 import Card from './Card';
 import FormsElement from './FormsElement';
-import axios from 'axios';
+import Loader from '../components/loader';
 
 class App extends React.Component {
     state ={}
     constructor(props){
         super(props);
         this.state = {
-            superHeroList: null,
+            superHeroList: [],
             searchField: '',
-            isLoading: false,
+            isLoading: true,
             showCard: false,
-            cssClass: 'placeholder'
+            // cssClass: 'placeholder'
         }
     }
-    fetchSuperHeroList = async ()=> {
-        let res = await fetch(`http://localhost:3100/superHero?name=${this.state.searchField}`,{
+    fetchSuperHeroList =  ()=> {
+        fetch(`  http://localhost:3100/superHero?name=${this.state.searchField}`,{
             method: 'GET'
         })
-        console.log(res,"res")
+        .then(res=> res.json())
+        .then(data=> {
+            // console.log(data);
+            if(data){
+
+                this.setState({
+                    superHeroList: data,
+                    isLoading: false,
+                    showCard: true
+                })
+            }
+            // this.handleCardView();
+            // console.log(this.state)
+        });
     }
     formSubmitHandler =(event) => {
         event.preventDefault()
-        // console.log(this.state.searchField)
-        this.fetchSuperHeroList()
+        if(this.state.searchField !== ''){
+            this.fetchSuperHeroList()
+        }
     }
     onChangeHandler = (event) => {
         this.setState({
@@ -32,19 +46,26 @@ class App extends React.Component {
         })
     }
     handleCardView =()=> {
-        if(!this.state.superHeroList){
-            return;
-        }else{
+        // console.log(this.state,"state")
+        if(this.state.showCard && !this.state.isLoading&& this.state.superHeroList.length > 0){
             return (
-                <Card heroData={this.state.superHeroList} />
+                <Card details={this.state} />
+            )
+        }else if(this.state.isLoading){
+            return(
+                <div>
+                <Loader/>
+                </div>
             )
         }
     }
+
     render() {
+        // let simmerClass=this.state
         return (
             <div>
                 <h1>Welcome To SuperHero List App</h1>
-                <form onSubmit={this.formSubmitHandler} className="ui form ${this.state.cssClass}">
+                <form onSubmit={this.formSubmitHandler} className={`ui form`}>
                     <FormsElement onChange={this.onChangeHandler} value={this.state.searchField} />
                 </form>
                 {this.handleCardView()}

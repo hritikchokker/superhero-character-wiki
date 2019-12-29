@@ -2,14 +2,8 @@ import React from 'react';
 
 class FormsElement extends React.Component {
 
-    constructor(props) {
-        super();
-       
-    }
-  
     render(){
         return(
-           
                 <div className="field">
                     <label>Characters Name</label>
                     <input onChange={this.props.onChange} value={this.props.value} placeholder="Search Your Hero" type="text" />
